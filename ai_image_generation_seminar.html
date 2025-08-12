@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI画像生成ツール完全解説セミナー</title>
+    
+    <!-- Mermaid.js の読み込み -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'base',
+                securityLevel: 'loose',
+                fontFamily: '"Kaisei Decol", sans-serif',
+                themeVariables: {
+                    primaryColor: '#4CAF50',
+                    primaryTextColor: '#fff',
+                    primaryBorderColor: '#E91E63',
+                    lineColor: '#009688',
+                    secondaryColor: '#FFC107',
+                    tertiaryColor: '#9575CD'
+                },
+                flowchart: {
+                    cornerRadius: 15,
+                    curve: 'cardinal',
+                    htmlLabels: true
+                }
+            });
+        });
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #FAFAFA 0%, #E8F5E8 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #009688 100%);
+            color: #333;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .ai-icon::before {
+            content: "🤖";
+            font-size: 24px;
+        }
+
+        .paint-icon::before {
+            content: "🎨";
+            font-size: 24px;
+        }
+
+        .tool-icon::before {
+            content: "🛠️";
+            font-size: 24px;
+        }
+
+        .demo-icon::before {
+            content: "🎯";
+            font-size: 24px;
+        }
+
+        .section {
+            background: #fff;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #4CAF50;
+        }
+
+        .section h2 {
+            color: #4CAF50;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h3 {
+            color: #009688;
+            font-size: 1.6em;
+            margin: 25px 0 15px 0;
+            padding-left: 20px;
+            border-left: 3px solid #009688;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, #E8F5E8 0%, #F0F8F0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4CAF50;
+        }
+
+        .background {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFF8F0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #FFC107;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #E8EAF6 0%, #F3E5F5 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9575CD;
+        }
+
+        .analogy {
+            background: linear-gradient(135deg, #E0F2F1 0%, #F0F8F8 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #009688;
+        }
+
+        .tool-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .tool-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #4CAF50;
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card h4 {
+            color: #4CAF50;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pros {
+            background: linear-gradient(135deg, #E8F5E8 0%, #F0F8F0 100%);
+            border: 2px solid #4CAF50;
+        }
+
+        .cons {
+            background: linear-gradient(135deg, #FFEBEE 0%, #FFF0F0 100%);
+            border: 2px solid #E91E63;
+        }
+
+        .workflow-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #FFC107 0%, transparent 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .step-by-step {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .step {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #4CAF50;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            background: #4CAF50;
+            color: #333;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin: 0 auto 15px auto;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFECB3 100%);
+            border: 2px solid #FF9800;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .warning::before {
+            content: "⚠️ ";
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+            
+            .tool-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><span class="ai-icon"></span>AI画像生成ツール完全解説セミナー</h1>
+            <p class="subtitle">🎨 誰でも簡単にプロ級の画像が作れる時代へ 🚀</p>
+        </header>
+
+        <section class="section">
+            <h2><span class="ai-icon"></span>1. セミナー概要と講師紹介</h2>
+            
+            <div class="conclusion">
+                <h3>📌 結論</h3>
+                <p><span class="highlight">AI画像生成技術</span>により、<strong>絵が描けない人でも思い通りの画像を簡単に作成できる時代</strong>が到来しました。本セミナーでは実践的な使い方を学びます。</p>
+            </div>
+
+            <div class="background">
+                <h3>🌍 背景</h3>
+                <p><span class="highlight">生成AI（ジェネレーティブAI）</span>の急速な発展により、画像生成分野でも革命的な変化が起きています。</p>
+                <ul>
+                    <li><strong>生成AI</strong>：人工知能が新しいコンテンツ（画像、文章、音楽など）を自動で作り出す技術</li>
+                    <li>これまで専門知識が必要だった画像制作が、誰でも簡単にできるようになった</li>
+                    <li>企業での活用事例も急速に増加中</li>
+                </ul>
+            </div>
+
+            <div class="example">
+                <h3>💡 具体例</h3>
+                <p>講師の活動例：</p>
+                <ul>
+                    <li><strong>小学生向けワークショップ</strong>：40名の親子（計80名）が参加して画像生成を体験</li>
+                    <li><strong>企業研修</strong>：富士フィルム、日本ペイントでのAI活用セミナー</li>
+                    <li><strong>YouTube「ジェネトピ」</strong>：AI画像生成の最新情報を発信</li>
+                    <li><strong>ニュースピックス</strong>での記事執筆と対談</li>
+                </ul>
+            </div>
+
+            <div class="analogy">
+                <h3>🔍 例え話</h3>
+                <p>AI画像生成は<strong>「魔法の筆」</strong>のようなものです。昔は絵を描くために長年の練習が必要でしたが、今は「こんな絵が欲しい」と言葉で伝えるだけで、AIが瞬時に美しい絵を描いてくれます。まるでアラジンの魔法のランプのように、願いを言葉にするだけで叶えてくれるのです。</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><span class="paint-icon"></span>2. AI画像生成の魅力と可能性</h2>
+            
+            <div class="conclusion">
+                <h3>📌 結論</h3>
+                <p><strong>言葉だけで思い通りの画像を作成</strong>でき、<span class="highlight">コミュニケーションツール</span>としても優秀。アイデアの可視化が簡単になります。</p>
+            </div>
+
+            <div class="background">
+                <h3>🌍 背景</h3>
+                <p>従来の画像制作の課題：</p>
+                <ul>
+                    <li>専門的な描画スキルが必要</li>
+                    <li>時間とコストがかかる</li>
+                    <li>イメージを他人に伝えるのが困難</li>
+                    <li>修正や変更に時間がかかる</li>
+                </ul>
+                <p><span class="highlight">プロンプト</span>（AIへの指示文）を入力するだけで、これらの問題が解決されます。</p>
+                <ul>
+                    <li><strong>プロンプト</strong>：AIに対して「こんな画像を作って」と指示する文章のこと</li>
+                </ul>
+            </div>
+
+            <div class="example">
+                <h3>💡 具体例</h3>
+                <div class="step-by-step">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>実写風の猫</h4>
+                        <p>「リアルな猫の写真」→ 本物そっくりな猫の画像</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>ドット絵風</h4>
+                        <p>「ゲームに出てくるドット絵の猫」→ レトロゲーム風の猫</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>ゆるキャラ風</h4>
+                        <p>「ゆるキャラ風のかわいい猫」→ マスコット的な猫</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>野菜で表現</h4>
+                        <p>「野菜で作られた猫」→ ユニークなアート作品</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analogy">
+                <h3>🔍 例え話</h3>
+                <p>AI画像生成は<strong>「翻訳機」</strong>のようなものです。日本語を英語に翻訳するように、「言葉」を「絵」に翻訳してくれます。「将来住みたい家」という抽象的な言葉を、具体的な家の画像に変換し、みんなで同じイメージを共有できるようになります。</p>
+            </div>
+
+            <div class="workflow-container">
+                <h3>🔄 AI画像生成のワークフロー</h3>
+                <div class="mermaid">
+                    flowchart TD
+                        A[💭 アイデア・イメージ] --> B[📝 プロンプト作成]
+                        B --> C[🤖 AIツール選択]
+                        C --> D[⚡ 画像生成実行]
+                        D --> E[🎨 生成された画像]
+                        E --> F{😊 満足？}
+                        F -->|はい| G[✅ 完成・保存]
+                        F -->|いいえ| H[🔧 プロンプト修正]
+                        H --> D
+                        
+                        style A fill:#E8F5E8
+                        style G fill:#E8F5E8
+                        style F fill:#FFF3E0
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><span class="tool-icon"></span>3. 主要なAI画像生成ツール比較</h2>
+            
+            <div class="conclusion">
+                <h3>📌 結論</h3>
+                <p>用途に応じて<strong>最適なツールを選択</strong>することが重要。<span class="highlight">商用利用ならAdobe</span>、<span class="highlight">クオリティ重視ならMidjourney</span>、<span class="highlight">無料体験ならImageFX</span>がおすすめです。</p>
+            </div>
+
+            <div class="background">
+                <h3>🌍 背景</h3>
+                <p>AI画像生成ツールは多数存在し、それぞれ異なる特徴があります：</p>
+                <ul>
+                    <li><strong>商用利用</strong>：ビジネスで使っても著作権的に問題ないかどうか</li>
+                    <li><strong>UI（ユーザーインターフェース）</strong>：操作画面の使いやすさ</li>
+                    <li><strong>画質・品質</strong>：生成される画像のクオリティ</li>
+                    <li><strong>コスト</strong>：無料か有料か、料金体系</li>
+                </ul>
+            </div>
+
+            <div class="tool-comparison">
+                <div class="tool-card">
+                    <h4>🤖 ChatGPT (DALL-E)</h4>
+                    <div class="pros">
+                        <h5>✅ メリット</h5>
+                        <ul>
+                            <li>会話形式で簡単操作</li>
+                            <li>画像の修正指示が直感的</li>
+                            <li>文字のレイアウトが得意</li>
+                            <li>色変更などの調整が簡単</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ デメリット</h5>
+                        <ul>
+                            <li>実写系の画質がやや劣る</li>
+                            <li>有料プラン必須</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h4>🎨 Midjourney</h4>
+                    <div class="pros">
+                        <h5>✅ メリット</h5>
+                        <ul>
+                            <li>最高クオリティの画像生成</li>
+                            <li>アーティスティックな表現が得意</li>
+                            <li>音声入力対応（会話モード）</li>
+                            <li>4枚同時生成</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ デメリット</h5>
+                        <ul>
+                            <li>月額10ドルの有料サービス</li>
+                            <li>初心者には操作が複雑</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h4>🏢 Adobe Firefly</h4>
+                    <div class="pros">
+                        <h5>✅ メリット</h5>
+                        <ul>
+                            <li>商用利用が安全</li>
+                            <li>企業での導入実績多数</li>
+                            <li>著作権問題をクリア</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ デメリット</h5>
+                        <ul>
+                            <li>画質は他ツールより劣る</li>
+                            <li>表現の幅が限定的</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h4>🆓 ImageFX</h4>
+                    <div class="pros">
+                        <h5>✅ メリット</h5>
+                        <ul>
+                            <li>完全無料</li>
+                            <li>日本語・英語両対応</li>
+                            <li>ロゴ作成に最適</li>
+                            <li>リアルな人物画像が得意</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ デメリット</h5>
+                        <ul>
+                            <li>商用利用は推奨されない</li>
+                            <li>炎上リスクの可能性</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>商用利用について：</strong>
+                ビジネスで使用する場合は、各ツールの利用規約を必ず確認してください。Adobe Fireflyが最も安全で、企業での採用実績も豊富です。
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><span class="demo-icon"></span>4. ChatGPTを使った画像生成実践</h2>
+            
+            <div class="conclusion">
+                <h3>📌 結論</h3>
+                <p>ChatGPTの<span class="highlight">DALL-E機能</span>は<strong>会話感覚で画像を修正</strong>でき、初心者に最も使いやすいツールです。</p>
+            </div>
+
+            <div class="background">
+                <h3>🌍 背景</h3>
+                <p>ChatGPTに搭載された<span class="highlight">DALL-E（ダリ）</span>は：</p>
+                <ul>
+                    <li><strong>DALL-E</strong>：OpenAIが開発した画像生成AI。画家のサルバドール・ダリとピクサーのWALL-Eを組み合わせた名前</li>
+                    <li>自然言語（普通の会話）で指示できる</li>
+                    <li>「もう少し明るくして」「背景を変えて」などの追加指示が簡単</li>
+                    <li>デザイン制作のクライアントとの打ち合わせに最適</li>
+                </ul>
+            </div>
+
+            <div class="example">
+                <h3>💡 具体例</h3>
+                <div class="step-by-step">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>基本の画像生成</h4>
+                        <p>「青い空と緑の草原で遊ぶ犬の写真」</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>修正指示</h4>
+                        <p>「犬をもう少し大きくして」</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>色の変更</h4>
+                        <p>「空の色を夕焼けオレンジに変えて」</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>要素追加</h4>
+                        <p>「背景に山を追加して」</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analogy">
+                <h3>🔍 例え話</h3>
+                <p>ChatGPTでの画像生成は<strong>「優秀なアシスタントとの打ち合わせ」</strong>のようなものです。「こんな感じの画像を作って」と伝えると、アシスタントがサンプルを持ってきてくれます。「ここをもう少しこうして」と追加で指示すると、すぐに修正版を持ってきてくれるのです。</p>
+            </div>
+
+            <div class="workflow-container">
+                <h3>🔄 ChatGPTでの画像生成フロー</h3>
+                <div class="mermaid">
+                    flowchart TD
+                        A[💬 ChatGPTを開く] --> B[📝 画像生成を依頼]
+                        B --> C[⚡ DALL-E が画像生成]
+                        C --> D[🖼️ 4つの候補が表示]
+                        D --> E{😊 気に入った？}
+                        E -->|はい| F[💾 ダウンロード保存]
+                        E -->|いいえ| G[🔧 修正指示を追加]
+                        G --> H[⚡ 修正版を生成]
+                        H --> D
+                        
+                        style A fill:#E8F5E8
+                        style F fill:#E8F5E8
+                        style E fill:#FFF3E0
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><span class="paint-icon"></span>5. Midjourney の高品質画像生成</h2>
+            
+            <div class="conclusion">
+                <h3>📌 結論</h3>
+                <p><span class="highlight">Midjourney</span>は<strong>最高品質の画像生成</strong>が可能で、<span class="highlight">音声入力機能</span>により誰でも簡単に操作できます。</p>
+            </div>
+
+            <div class="background">
+                <h3>🌍 背景</h3>
+                <p>Midjourneyの特徴：</p>
+                <ul>
+                    <li><strong>V7モデル</strong>：200万枚の画像学習による最新AI技術</li>
+                    <li><strong>パーソナライズ機能</strong>：ユーザーの好みを学習して、好みに合った画像を生成</li>
+                    <li><strong>コンバセーショナルモード</strong>：音声での指示が可能</li>
+                    <li><strong>ドラフトモード</strong>：高速で画像生成（品質は若干落ちるが実用レベル）</li>
+                </ul>
+            </div>
+
+            <div class="example">
+                <h3>💡 具体例</h3>
+                <p><strong>実演内容：</strong></p>
+                <div class="step-by-step">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>音声入力</h4>
+                        <p>「かわいいゴリラを作って」と話しかける</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>AI が画像生成</h4>
+                        <p>4種類のゴリラ画像が自動生成される</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>追加指示</h4>
+                        <p>「もっとゆるキャラ風にして」</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>動画化</h4>
+                        <p>静止画を動くアニメーションに変換</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analogy">
+                <h3>🔍 例え話</h3>
+                <p>Midjourneyは<strong>「プロのイラストレーターのアトリエ」</strong>のようなものです。あなたが「こんな絵を描いて」と注文すると、世界トップクラスのアーティストが複数のラフ案を描いてくれます。気に入ったものがあれば「この方向でもっと詳しく」と伝えると、さらに洗練された作品に仕上げてくれるのです。</p>
+            </div>
+
+            <div class="workflow-container">
+                <h3>🔄 Midjourneyの動画生成フロー</h3>
+                <div class="mermaid">
+                    flowchart TD
+                        A[🎨 静止画を生成] --> B[📤 画像をアップロード]
+                        B --> C[💬 ChatGPTで動画プロンプト作成]
+                        C --> D[📝 「この画像を踊らせて」等の指示]
+                        D --> E[⚡ 動画生成実行]
+                        E --> F[🎬 動くアニメーション完成]
+                        
+                        style A fill:#E8F5E8
+                        style F fill:#E8F5E8
+                        style C fill:#FFF3E0
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>注意点：</strong>
+                Midjourneyは月額10ドルの有料サービスです。ただし、その品質は他のツールを圧倒しており、プロフェッショナルな用途には最適です。
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><span class="tool-icon"></span>6. その他の画像生成ツール</h2>
+            
+            <div class="conclusion">
+                <h3>📌 結論</h3>
+                <p><span class="highlight">用途別</span>に最適なツールを選択：<strong>企業利用はAdobe Firefly</strong>、<strong>無料体験はImageFX</strong>、<strong>動画生成はVeos</strong>がおすすめです。</p>
+            </div>
+
+            <div class="tool-comparison">
+                <div class="tool-card">
+                    <h4>🔥 Adobe Firefly</h4>
+                    <p><strong>企業での商用利用に最適</strong></p>
+                    <div class="example">
+                        <h5>活用例</h5>
+                        <ul>
+                            <li>「化粧水が潤う、みずみずしい女性の肌」→ 美容広告用画像</li>
+                            <li>「赤い化粧品」→ 商品イメージ画像</li>
+                            <li>企業のマーケティング素材作成</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h4>📸 ImageFX</h4>
+                    <p><strong>無料で高品質！初心者におすすめ</strong></p>
+                    <div class="example">
+                        <h5>特徴</h5>
+                        <ul>
+                            <li>完全無料で200クレジット提供（約20枚生成可能）</li>
+                            <li>日本語・英語両対応</li>
+                            <li>ロゴ作成に優秀</li>
+                            <li>リアルな人物画像生成が得意</li>
+                        </ul>
+                    </div>
+                    <div class="warning">
+                        商用利用は避け、個人の練習用として使用しましょう
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h4>🎬 Veos</h4>
+                    <p><strong>音声付き動画生成が可能</strong></p>
+                    <div class="example">
+                        <h5>機能</h5>
+                        <ul>
+                            <li>静止画から動画を生成</li>
+                            <li>BGMや効果音を自動追加</li>
+                            <li>キャラクターにセリフを話させることが可能</li>
+                            <li>プレゼンテーション用動画作成に最適</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>注意点</h5>
+                        <p>動画生成は800クレジット消費と高コスト。Midjourneyの方がコスパ良好。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workflow-container">
+                <h3>🎯 用途別ツール選択フロー</h3>
+                <div class="mermaid">
+                    flowchart TD
+                        A[🎨 画像生成したい] --> B{💼 商用利用？}
+                        B -->|はい| C[🏢 Adobe Firefly]
+                        B -->|いいえ| D{💰 予算は？}
+                        D -->|無料で試したい| E[🆓 ImageFX]
+                        D -->|品質重視| F[💎 Midjourney]
+                        D -->|会話形式が良い| G[🤖 ChatGPT]
+                        
+                        C --> H[✅ 安全・確実]
+                        E --> I[🎓 学習・練習用]
+                        F --> J[🏆 最高品質]
+                        G --> K[👥 初心者向け]
+                        
+                        style C fill:#4CAF50,color:#fff
+                        style E fill:#FFC107
+                        style F fill:#9575CD,color:#fff
+                        style G fill:#009688,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><span class="demo-icon"></span>7. 実践デモンストレーション</h2>
+            
+            <div class="conclusion">
+                <h3>📌 結論</h3>
+                <p><strong>実際に手を動かして体験</strong>することで、AI画像生成の可能性を実感できます。<span class="highlight">「子供が喜ぶかわいいゴリラ」</span>をテーマに実践しました。</p>
+            </div>
+
+            <div class="background">
+                <h3>🌍 背景</h3>
+                <p>セミナーでの実践内容：</p>
+                <ul>
+                    <li><strong>共通テーマ</strong>：「子供が喜ぶような可愛らしいゴリラ」</li>
+                    <li>参加者が各自でプロンプトを考案</li>
+                    <li>複数のツールで同じテーマを生成し比較</li>
+                    <li>生成した画像をSNSで共有</li>
+                </ul>
+            </div>
+
+            <div class="example">
+                <h3>💡 具体例</h3>
+                <div class="step-by-step">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>基本プロンプト</h4>
+                        <p>「ポップでかわいらしいゴリラをゆるキャラ風に」</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>ツール別比較</h4>
+                        <p>同じプロンプトで各ツールの違いを確認</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>動画化チャレンジ</h4>
+                        <p>「このゴリラにダンスをさせて」で動画生成</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>結果共有</h4>
+                        <p>作品をSNSで共有し、フィードバック</p>
+                    </div>
+                </div>
+
+                <div class="background">
+                    <h5>参加者からの実際のプロンプト例：</h5>
+                    <ul>
+                        <li>「いけてないサラリーマン大吉君：体型が良くて短髪でヒゲを生やした男性、上司に怒られて落ち込んでいる様子」</li>
+                        <li>「自然とテクノロジーの融合」→「この自然をゆるキャラ風にして」</li>
+                        <li>「カメラを持った女性」（持ち方の自然さを検証）</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="analogy">
+                <h3>🔍 例え話</h3>
+                <p>実践デモは<strong>「料理教室」</strong>のようなものです。レシピ（プロンプト）を見るだけでは料理の味は分かりません。実際に材料（ツール）を使って調理（画像生成）してみることで、初めてその美味しさ（クオリティ）や作りやすさ（使いやすさ）が分かるのです。</p>
+            </div>
+
+            <div class="workflow-container">
+                <h3>🎯 実践デモのワークフロー</h3>
+                <div class="mermaid">
+                    flowchart TD
+                        A[🎯 共通テーマ設定] --> B[💭 各自でアイデア考案]
+                        B --> C[📝 プロンプト作成]
+                        C --> D[🔄 複数ツールで生成]
+                        D --> E[📊 結果比較・分析]
+                        E --> F[💬 参加者同士で共有]
+                        F --> G[📱 SNS投稿]
+                        G --> H[🎉 みんなで鑑賞会]
+                        
+                        style A fill:#E8F5E8
+                        style H fill:#E8F5E8
+                        style E fill:#FFF3E0
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>実践のコツ：</strong>
+                最初から完璧を求めず、「とりあえず作ってみる」精神が大切です。AIとの対話を楽しみながら、試行錯誤することで理想の画像に近づけましょう。
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚀 まとめと今後の展望</h2>
+            
+            <div class="conclusion">
+                <h3>📌 総括</h3>
+                <p>AI画像生成技術は<strong>創造性の民主化</strong>を実現しました。<span class="highlight">誰でも、いつでも、思い描いたイメージを形にできる</span>時代の到来です。</p>
+            </div>
+
+            <div class="step-by-step">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>🎯 目的の明確化</h4>
+                    <p>商用利用か個人利用かを決める</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>🛠️ ツール選択</h4>
+                    <p>用途に応じた最適なAIツールを選ぶ</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>📝 プロンプト技術習得</h4>
+                    <p>効果的な指示文の書き方を学ぶ</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>🔄 継続的な実践</h4>
+                    <p>実際に作りながらスキルを向上させる</p>
+                </div>
+            </div>
+
+            <div class="example">
+                <h3>🌟 今日から始められること</h3>
+                <ul>
+                    <li><strong>無料ツールで体験</strong>：ImageFXで今すぐ画像生成を試してみる</li>
+                    <li><strong>SNSで共有</strong>：作った画像をハッシュタグ付きで投稿</li>
+                    <li><strong>コミュニティ参加</strong>：AI画像生成の勉強会やオンラインコミュニティに参加</li>
+                    <li><strong>ビジネス活用</strong>：職場でのプレゼンテーション資料作成に活用</li>
+                </ul>
+            </div>
+
+            <div class="workflow-container">
+                <h3>🎓 学習ロードマップ</h3>
+                <div class="mermaid">
+                    flowchart TD
+                        A[🚀 スタート] --> B[🆓 無料ツールで基礎体験]
+                        B --> C[📚 プロンプト技術学習]
+                        C --> D[💎 有料ツールでクオリティアップ]
+                        D --> E[🏢 ビジネス活用開始]
+                        E --> F[👥 コミュニティで情報共有]
+                        F --> G[🎨 オリジナル作品創作]
+                        G --> H[🌟 AI画像生成マスター]
+                        
+                        style A fill:#4CAF50,color:#fff
+                        style H fill:#E91E63,color:#fff
+                        style D fill:#FFC107
+                </div>
+            </div>
+
+            <div class="background">
+                <h3>🔮 未来への期待</h3>
+                <p>AI画像生成技術の進歩により、以下のような未来が期待されます：</p>
+                <ul>
+                    <li><strong>教育現場</strong>：子供たちの想像力を視覚化し、学習効果を向上</li>
+                    <li><strong>ビジネス</strong>：企画会議でのアイデア共有が飛躍的に効率化</li>
+                    <li><strong>個人創作</strong>：誰もがアーティストになれる時代の到来</li>
+                    <li><strong>コミュニケーション</strong>：言葉の壁を越えた視覚的な意思疎通</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 40px; background: linear-gradient(135deg, #4CAF50 0%, #009688 100%); color: #333; border-radius: 15px; margin-top: 40px;">
+            <h3>🎉 セミナー完了！ お疲れ様でした！</h3>
+            <p style="font-size: 1.2em; margin: 20px 0;">AI画像生成の世界へようこそ！<br>今日学んだ技術で、あなたの創造性を存分に発揮してください。</p>
+            <p>📺 <strong>YouTube「ジェネトピ」</strong>でさらなる情報をチェック！<br>
+            📰 <strong>ニュースピックス</strong>での最新記事もお見逃しなく！</p>
+        </footer>
+    </div>
+</body>
+</html>

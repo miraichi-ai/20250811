@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI画像生成マスターセミナー - 初心者から上級者まで楽しく学べる実践講座</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'base',
+                securityLevel: 'loose',
+                fontFamily: 'sans-serif',
+                themeVariables: {
+                    primaryColor: '#4CAF50',
+                    primaryTextColor: '#fff',
+                    primaryBorderColor: '#9575CD',
+                    lineColor: '#009688',
+                    secondaryColor: '#FFC107',
+                    tertiaryColor: '#f0f0f0'
+                },
+                flowchart: {
+                    curve: 'basis'
+                }
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --main-color: #4CAF50;
+            --accent-color-1: #9575CD;
+            --accent-color-2: #FFC107;
+            --accent-color-3: #009688;
+            --accent-color-4: #E91E63;
+            --background-color: #FAFAFA;
+            --text-color: #333;
+            --light-text-color: #FFF;
+            --border-color: #E0E0E0;
+        }
+        body {
+            font-family: sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1, h2, h3, h4 { 
+            color: var(--main-color); 
+            margin-bottom: 0.8em; 
+        }
+        h1 { 
+            font-size: 2.2em; 
+            text-align: center; 
+            border-bottom: 2px solid var(--accent-color-2); 
+            padding-bottom: 10px; 
+        }
+        h2 { 
+            font-size: 1.8em; 
+            color: var(--accent-color-3); 
+            border-left: 5px solid var(--accent-color-3); 
+            padding-left: 10px; 
+            margin-top: 2em;
+        }
+        h3 { 
+            font-size: 1.4em; 
+            color: var(--accent-color-1); 
+            margin-top: 1.5em; 
+        }
+        strong { 
+            color: var(--accent-color-4); 
+        }
+        ul, ol { 
+            padding-left: 25px; 
+        }
+        li { 
+            margin-bottom: 0.5em; 
+        }
+        p { 
+            margin-bottom: 1em; 
+        }
+        .hero-section {
+            background-color: var(--main-color);
+            color: var(--light-text-color);
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .hero-section h1 { 
+            color: var(--light-text-color); 
+            border-bottom: none; 
+        }
+        .hero-section p { 
+            font-size: 1.1em; 
+        }
+        .benefits-section ul li::before {
+            content: '✅ ';
+            color: var(--main-color);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        .process-section ol {
+            list-style: none;
+            counter-reset: step-counter;
+            padding-left: 0;
+        }
+        .process-section li {
+            counter-increment: step-counter;
+            margin-bottom: 1em;
+            position: relative;
+            padding-left: 40px;
+        }
+        .process-section li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-color-2);
+            color: var(--text-color);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+        }
+        .quote {
+            background-color: #f0f0f0;
+            border-left: 5px solid var(--accent-color-1);
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        .faq-section dt {
+            font-weight: bold;
+            color: var(--accent-color-3);
+            margin-top: 1em;
+        }
+        .faq-section dd {
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+        .mermaid {
+            margin-bottom: 1.5em;
+            text-align: center;
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .testimonial-card {
+            background-color: #f9f9f9;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+        .participant-info {
+            color: var(--accent-color-1);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero-section">
+            <h1>💡 AI画像生成を楽しく本格マスター</h1>
+            <p><strong>「ハンズオンもあってめちゃくちゃ楽しかった！」「1時間があっという間」「目からウロコでした」</strong><br>
+            30代〜60代以上、初心者から継続参加者まで大満足の<span style="color: var(--accent-color-2); font-weight: bold;">和馬講師の安定感抜群セミナー</span></p>
+            <p>🎨 ゴリラ祭・野菜表現・音声入力 × 実践ハンズオン × わかりやすい解説</p>
+        </section>
+
+        <section class="benefits-section">
+            <h2>🎯 この講座から得られること</h2>
+            <h3>主な学習内容 / トピック</h3>
+            <ul>
+                <li><strong>AI画像生成ツールの横軸比較</strong>（Midjourney、イメージFX、ChatGPT連携など） - 参加者：「他のソフトの特徴も分かって良かった！」</li>
+                <li><strong>初心者にもわかりやすいプロンプト作成</strong>（簡単で効果的な手法） - 参加者：「プロンプトも面白く、AIの反応にも驚き通し」</li>
+                <li><strong>音声での画像生成</strong>という新しいアプローチ - 参加者：「音声で気軽にやってみたいと思いました」</li>
+                <li><strong>創造的な表現手法</strong>（野菜で表現、ゴリラ祭など） - 参加者：「自分にはない発想だったので、発想を膨らますのが面白い」</li>
+                <li><strong>動画作成の基礎</strong>と応用テクニック - 参加者：「かわいいキャラが走ってる動画の作り方、最後に知れてよかった」</li>
+                <li><strong>実践的なハンズオン</strong>で手を動かしながら学習 - 参加者：「ハンズオンもあってめちゃくちゃ楽しかった！」</li>
+            </ul>
+            <h3>💡 具体的にできるようになること / 成果</h3>
+            <ul>
+                <li><strong>複数のAI画像生成ツールを使い分けられる</strong>ようになる - 「まずはイメージFXを触ってみようと思います」</li>
+                <li><strong>効果的なプロンプトが自然に書ける</strong>ようになる - 「プロンプトも簡単なものが多く、初心者にはわかりやすい」</li>
+                <li><strong>アイデアを具体的な画像として表現</strong>できるようになる - 「考えを画像にする、やってみたいです」</li>
+                <li><strong>ChatGPTと画像生成AIを連携</strong>させた作業が可能になる - 「ChatGPTも絡めながらの比較・横展開は目からウロコ」</li>
+                <li><strong>オリジナルコンテンツ作成</strong>（缶バッジ、イラストなど）ができる - 「子供向けにオリジナル缶バッチ作るセミナーいいな」</li>
+                <li><strong>継続的なスキルアップ</strong>が実現できる - 「確実に出来ることと理解が深まっている」</li>
+            </ul>
+            <h3>✨ 期待される変化 / ポジティブな影響</h3>
+            <p>参加者からは<strong>「画像生成の楽しさが益々湧いてきた」「奥が深いと実感」「発想が膨らむ面白さ」</strong>という声が続出。<span style="color: var(--accent-color-4); font-weight: bold;">「画像生成に興味あるけど、難しそうでmidjourneyしたことなかった」</span>という方も<strong>「音声で気軽にやってみたい」</strong>と意識が変化。</p>
+            <p><strong>継続参加者</strong>からは「AI画像関連、続けて参加しています。いつも有益なウェビナーで感謝です」「確実に出来ることと理解が深まっている」という成長実感の声も。<strong>「リラックスして聞けて良かった」「気持ちよくセミナーの時間を過ごせた」</strong>という和やかな学習環境で、創造性も自然と向上していきます。</p>
+        </section>
+
+        <section class="proof-section">
+            <h2>💬 参加者の生の声 / 具体的な成果</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="participant-info">40代 男性会社員</div>
+                    <p>"画像生成AIの横軸比較、勉強になりました。ChatGPTも絡めながらの比較・横展開は<strong>目からウロコ</strong>でした。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">50代 女性会社員</div>
+                    <p>"和馬くんのお話は<strong>安定感があり</strong>、また、たくさん勉強になります。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">40代 男性会社員</div>
+                    <p>"内容が楽しく<strong>1時間があっという間</strong>でした。プロンプトも簡単なものが多く、初心者にはわかりやすく良かった。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">30代 女性個人事業主</div>
+                    <p>"プロンプトも面白く、<strong>AIの反応にも驚き通し</strong>で、とても楽しい講座でした！"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">50代 男性個人事業主</div>
+                    <p>"切り口が新鮮で勉強になりました。<strong>次の講座も楽しみに</strong>お待ちしています。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">60代以上 男性個人事業主</div>
+                    <p>"講師の説明がとても分かりやすく、<strong>気持ちよくセミナーの時間を過ごす</strong>ことができました。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">40代 女性会社員</div>
+                    <p>"<strong>Midjourneyばかり使っていた</strong>ので、他の画像生成AIの情報は勉強になります。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">50代 男性経営者</div>
+                    <p>"Midjourney勉強になりました！<strong>奥が深い！</strong>"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">50代 男性個人事業主</div>
+                    <p>"画像生成の<strong>楽しさが益々湧いて来ました</strong> ありがとうございました"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">40代 女性個人事業主</div>
+                    <p>"<strong>音声で気軽にやってみたい</strong>と思いました。色々なツールについても知れてよかった。<strong>オリジナル缶バッチ作るセミナー</strong>いいな、と思いました。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">30代 女性会社員</div>
+                    <p>"<strong>ゴリラ祭</strong>でしたね！楽しかったです"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">40代 女性会社員</div>
+                    <p>"画像生成　奥が深いなぁと思いました　<strong>野菜で表現して</strong>とかも自分にはない発想だったので、発想を膨らますのが面白い"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">30代 女性求職中</div>
+                    <p>"イラスト作成や動画作成が大好きなので、<strong>ハンズオンもあってめちゃくちゃ楽しかった</strong>です！ダイチさんのゴリラに爆笑でした笑！"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">50代 男性会社員</div>
+                    <p>"<strong>楽しく手を動かしながら</strong>拝聴致しました。運営されている方々の盛り上げ方がよくて、<strong>参加している方の画像の投稿が多かった</strong>ように思います！"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">50代 女性個人事業主</div>
+                    <p>"画像、動画作成にまだまだ苦手意識があるため、ツールの特徴など教えていただいたのは嬉しかったです。<strong>まずはイメージFXを触ってみよう</strong>と思います。"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="participant-info">40代 個人事業主</div>
+                    <p>"AI画像関連、続けて参加しています。<strong>いつも有益なウェビナーで感謝</strong>です。AIプロンプト関連はぜひ今後も参加したい！"</p>
+                </div>
+            </div>
+
+            <pre class="mermaid">
+                mindmap
+                  root)AI画像生成マスタリー(
+                    ツール比較
+                      Midjourney
+                      イメージFX
+                      ChatGPT連携
+                    プロンプト技術
+                      初心者向け
+                      簡単で効果的
+                      音声入力
+                    実践スキル
+                      ハンズオン
+                      リアルタイム作成
+                      オリジナル制作
+                    創造性向上
+                      発想の転換
+                      表現の幅拡大
+                      楽しさの発見
+            </pre>
+        </section>
+
+        <section class="process-section">
+            <h2>➡️ 講座の進行プロセス / 学習ステップ</h2>
+            <h3>具体的な学習の流れ</h3>
+            <ol>
+                <li><strong>ツール紹介と比較:</strong> 各AI画像生成ツールの特徴を横軸で比較し、それぞれの強みと使い分けのポイントを理解</li>
+                <li><strong>プロンプト基礎:</strong> 初心者でもすぐに使える簡単で効果的なプロンプト作成方法を実践的に習得</li>
+                <li><strong>ハンズオン実践:</strong> 実際に手を動かしながら、様々なスタイルやテーマで画像を生成し、コツを体得</li>
+                <li><strong>応用テクニック:</strong> ChatGPTとの連携、音声入力、動画作成など、一歩進んだ使い方をマスター</li>
+                <li><strong>創作実習:</strong> 学んだ技術を使って、オリジナル作品を作成し、創造性を発揮</li>
+                <li><strong>質疑応答と共有:</strong> 参加者同士で作品を共有し、疑問点を解決して理解を深化</li>
+            </ol>
+
+            <pre class="mermaid">
+                graph TD
+                    A[ツール紹介・比較] --> B[プロンプト基礎学習]
+                    B --> C[ハンズオン実践]
+                    C --> D[応用テクニック]
+                    D --> E[創作実習]
+                    E --> F[作品共有・Q&A]
+                    
+                    A1[Midjourney] --> A
+                    A2[イメージFX] --> A
+                    A3[ChatGPT連携] --> A
+                    
+                    C1[画像生成実習] --> C
+                    C2[プロンプト調整] --> C
+                    C3[スタイル実験] --> C
+                    
+                    D1[音声入力] --> D
+                    D2[動画作成] --> D
+                    D3[高度な表現] --> D
+            </pre>
+        </section>
+
+        <section class="experience-section">
+            <h2>🌟 幅広い参加者層からの高評価</h2>
+            <h3>📊 参加者の多様性</h3>
+            <p><strong>30代〜60代以上</strong>、<strong>会社員・経営者・個人事業主・フリーランス</strong>など、幅広い層の方が参加し、それぞれの立場で価値を実感されています。</p>
+            
+            <div class="quote">
+                <p><strong>継続参加者の声</strong></p>
+                <p>"AI画像関連、続けて参加しています。いつも有益なウェビナーで感謝です。AIプロンプト関連はぜひ今後も参加したいと思います！"<br>
+                <em>- 40代 個人事業主</em></p>
+            </div>
+
+            <div class="quote">
+                <p><strong>学習の成長実感</strong></p>
+                <p>"確実に出来ることと理解が深まっているので、本当に出会えてよかったって思ってます。息子の友人が日本から来ていて、18歳に私がやってることを言ったら、それいいな、僕も入ろうかなって言ってました🤭50代が18歳にgitはね、バージョン管理ができるんだよ、って言えるんですよ"<br>
+                <em>- 50代 女性個人事業主</em></p>
+            </div>
+
+            <h3>🎯 具体的な学習成果と楽しい体験</h3>
+            <ul>
+                <li><strong>「ゴリラ祭」での爆笑体験</strong> - 参加者同士で盛り上がり、創作の楽しさを共有</li>
+                <li><strong>「野菜で表現」</strong>などの斬新なプロンプト手法で発想力が拡大</li>
+                <li><strong>音声入力での画像生成</strong>という新しいアプローチに挑戦</li>
+                <li><strong>オリジナル缶バッジ作成</strong>など実用的なコンテンツ制作スキル習得</li>
+                <li><strong>「かわいいキャラが走ってる動画」</strong>の作成方法まで学習</li>
+            </ul>
+
+            <pre class="mermaid">
+                pie title 参加者満足度の声
+                    "楽しかった・面白かった" : 35
+                    "勉強になった・目からウロコ" : 30
+                    "わかりやすかった" : 20
+                    "継続参加したい" : 15
+            </pre>
+        </section>
+
+        <section class="faq-section">
+            <h2>❓ よくある質問と回答</h2>
+            <dl>
+                <dt>Q1: 完全初心者でもついていけますか？</dt>
+                <dd>A1: はい、大丈夫です。参加者の声では<strong>「初心者にはわかりやすく良かった」「プロンプトも簡単なものが多い」</strong>という評価をいただいています。実際に<strong>「画像生成に興味あるけど、難しそうでmidjourneyしたことなかった」</strong>という方も、講座後には「音声で気軽にやってみたい」と前向きになられています。</dd>
+                
+                <dt>Q2: どのようなAIツールについて学べますか？</dt>
+                <dd>A2: <strong>Midjourney、イメージFX、ChatGPTとの連携</strong>など、複数のツールを横軸で比較して学びます。参加者からは<strong>「Midjourneyばかり使っていたので、他の画像生成AIの情報は勉強になる」「まずはイメージFXを触ってみようと思います」</strong>という声があり、実践的な使い分けが身につきます。</dd>
+                
+                <dt>Q3: 実際に手を動かして学べますか？</dt>
+                <dd>A3: はい、<strong>ハンズオン形式</strong>が中心です。<strong>「ハンズオンもあってめちゃくちゃ楽しかった」「楽しく手を動かしながら拝聴できた」「参加している方の画像の投稿が多かった」</strong>という声の通り、実践的で参加型の学習環境が整っています。</dd>
+                
+                <dt>Q4: どんな創作体験ができますか？</dt>
+                <dd>A4: <strong>「野菜で表現して」「ゴリラ祭」「オリジナル缶バッチ作成」「かわいいキャラが走ってる動画」</strong>など、ユニークで楽しい創作体験が満載です。参加者からは<strong>「自分にはない発想だったので、発想を膨らますのが面白い」「AIの反応にも驚き通し」</strong>という声をいただいています。</dd>
+                
+                <dt>Q5: 継続して学習したい場合はどうですか？</dt>
+                <dd>A5: <strong>「AI画像関連、続けて参加しています。いつも有益なウェビナーで感謝です」「確実に出来ることと理解が深まっている」</strong>という継続参加者の声があります。<strong>「第2弾でも第3弾でも教えていただきたい」「今更聞けないシリーズは、別のシリーズもやってほしい」</strong>という要望にもお応えしています。</dd>
+                
+                <dt>Q6: どのような雰囲気で進行されますか？</dt>
+                <dd>A6: <strong>「リラックスして聞けて良かった」「楽しく1時間があっという間」「気持ちよくセミナーの時間を過ごせた」</strong>という評価の通り、和やかで楽しい雰囲気です。運営チームの盛り上げもあり、参加者同士の交流も活発な環境で学習できます。</dd>
+            </dl>
+        </section>
+    </div>
+</body>
+</html>
